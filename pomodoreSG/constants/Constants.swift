@@ -9,6 +9,13 @@ import Foundation
 import SwiftUI
 
 struct Constants {
+    static private let josefinSansBold: String = "JosefinSans-Bold"
+    static private let josefinSansMedium: String = "JosefinSans-Medium"
+    static private let josefinSandSemiBold: String = "JosefinSans-SemiBold"
+    static private let josefineSansRegular: String = "JosefinSans-Regular"
+    static private let josefinSansLightName: String = "JosefinSans-Light"
+    static private let josefinSansThinName: String = "JosefinSans-Thin"
+    
     struct Colors {
         static let darkPrimaryColor: Color = Color(hex: "#D32F2F")
         static let lightPrimaryColor: Color = Color(hex: "#FFCDD2")
@@ -21,15 +28,14 @@ struct Constants {
     }
     
     struct Fonts {
-        static let titleFont: Font = Font.custom("JosefinSans-Bold", size: 26)
-        static let subtitleFont: Font = Font.custom("JosefinSans-Medium", size: 20)
-        static let tinyTitleFont: Font = Font.custom("JosefinSans-SemiBold", size: 18)//Not necessary
-        static let regularFont: Font = Font.custom("JosefinSans-Regular", size: 16)
-        static let bigFont: Font = Font.custom("JosefinSans-Regular", size: 18)
-        static let tinyFont: Font = Font.custom("JosefinSans-Regular", size: 14)
-        static let caption: Font = Font.custom("JosefinSans-Regular", size: 12)
-        
-        static let josefinSansLight: Font = Font.custom("JosefinSans-Light", size: 26)
-        static let josefinSansThin: Font = Font.custom("JosefinSans-Thin", size: 26)
+        static let titleFont: Font = Font.custom(josefinSansBold, size: 26)
+        static let subtitleFont: Font = Font.custom(josefinSansMedium, size: 20)
+        static let tinyTitleFont: Font = Font.custom(josefinSandSemiBold, size: 18)//Not necessary
+        static let regularFont: Font = Font.custom(josefineSansRegular, size: 16)
+        static let bigFont: Font = Font.custom(josefineSansRegular, size: 18)
+        static let tinyFont: Font = Font.custom(josefineSansRegular, size: 14)
+        static let caption: Font = Font.custom(josefineSansRegular, size: 12)
+        static let josefinSansLight: Font = Font.custom(josefinSansLightName, size: 26)
+        static let josefinSansThin: Font = Font.custom(josefinSansThinName, size: 26)
     }
 }
