@@ -15,55 +15,51 @@ struct HomeView: View {
     var body: some View {
         NavigationView {
             ZStack {
-                ScrollView {
-                    VStack(alignment: .leading) {
-                        let projects: [Projects] = viewModel.projects
-                        ForEach(projects, id: \.name) { project in
-                            VStack (alignment: .leading){
-                                HStack(alignment: .top) {
-                                    Text(project.name)
-                                        .foregroundColor(Constants.Colors.textIconsColor)
-                                        .font(Constants.Fonts.bigFont)
-                                        .padding()
-                                    Spacer()
-                                    Text("Tareas: \(project.tasksNumber)")
-                                        .foregroundColor(Constants.Colors.textIconsColor)
-                                        .font(Constants.Fonts.bigFont)
-                                        .padding()
-                                }
+                let projects: [Projects] = viewModel.projects
+                List {
+                    ForEach(projects, id: \.name) { project in
+                        VStack (alignment: .leading){
+                            HStack(alignment: .top) {
+                                Text(project.name)
+                                    .foregroundColor(Constants.Colors.primaryText)
+                                    .font(Constants.Fonts.bigFont)
+                                    .padding()
+                                Spacer()
+                                Text("Tareas: \(project.tasksNumber)")
+                                    .foregroundColor(Constants.Colors.primaryText)
+                                    .font(Constants.Fonts.bigFont)
+                                    .padding()
+                            }
+                            
+                            HStack {
+                                Text("Minutos dedicados: \(project.elapsedTime)")
+                                    .foregroundColor(Constants.Colors.primaryText)
+                                    .font(Constants.Fonts.tinyFont)
+                                    .padding(.leading)
+                                Spacer()
                                 
-                                HStack {
-                                    Text("Minutos dedicados: \(project.elapsedTime)")
-                                        .foregroundColor(Constants.Colors.textIconsColor)
-                                        .font(Constants.Fonts.tinyFont)
-                                        .padding(.leading)
-                                    Spacer()
-                                    
-                                    Button(action: {
-                                        print(project.uid)
-                                    }) {
-                                        Image("more")
-                                            .resizable()
-                                            .frame(width: 25, height: 25)
-                                    }.padding()
+                                Button(action: {
+                                    print(project.projectId)
+                                }) {
+                                    EmptyView()
                                 }
-                                Divider()
-                                    .background(Constants.Colors.dividerColor)
-                            }.padding(.bottom, 5)
-                        }
+                            }
+                        }.padding(.bottom, 5)
                     }
-                    .frame(
-                        minWidth: 0,
-                        maxWidth: .infinity,
-                        minHeight: 0,
-                        maxHeight: .infinity,
-                        alignment: .center)
+                    .onDelete { i in
+                        print("\(i) was deleted")
+                    }
                 }
+                .overlay(Group {
+                    if projects.isEmpty {
+                        Text("Aún no tienes proyectos. ¡Crea uno!")
+                    }
+                })
                 
                 NavigationLink(destination: viewModel.destination, isActive: $viewModel.showNextScreen, label: {})
             }
             .navigationBarTitle(Text("Proyectos"), displayMode: .inline)
-            .background(Constants.Colors.darkPrimaryColor)
+            .background(Constants.Colors.textIconsColor)
             .navigationBarItems(
                 trailing: AddButton(action: {
                     viewModel.showMenu.toggle()
@@ -81,34 +77,33 @@ struct HomeView: View {
         .sheet(isPresented: $viewModel.showMenu) {
             if #available(iOS 16, *) {
                 MenuView(
-                    newProject: {},
+                    newProject: { interactor?.showNewProject() },
                     profile: {},
                     reports: {},
                     fixes: {},
-                    AppLogout: { AppLogout() })
-                    .presentationDetents([.height(270)])
-                    .presentationDragIndicator(.hidden)
+                    AppLogout: { interactor?.appLogout() })
+                .presentationDetents([.height(270)])
+                .presentationDragIndicator(.hidden)
             } else {
                 MenuView(
-                    newProject: {},
+                    newProject: { interactor?.showNewProject() },
                     profile: {},
                     reports: {},
                     fixes: {},
-                    AppLogout: {
-                        AppLogout()
-                    })
+                    AppLogout: { interactor?.appLogout() }
+                )
             }
+        }
+        .sheet(isPresented: $viewModel.showCreateNewProject, content: {
+            Text("Registrar nuevo proyecto")
+        })
+        .onChange(of: viewModel.closeApp) { _ in
+            presentation.wrappedValue.dismiss()
         }
     }
     
     func viewDidLoad() {
         interactor?.getProjectsList()
-    }
-    
-    func AppLogout() {
-        let persistance = LocalPersistanceDefault()
-        persistance.deleteDefaultPersistance()
-        presentation.wrappedValue.dismiss()
     }
 }
 

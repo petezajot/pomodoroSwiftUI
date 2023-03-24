@@ -11,6 +11,8 @@ import SwiftUI
 
 protocol HomeBusinessLogic {
     func getProjectsList()
+    func appLogout()
+    func showNewProject()
 }
 
 final class HomeInteractor {
@@ -38,6 +40,15 @@ final class HomeInteractor {
 }
 
 extension HomeInteractor: HomeBusinessLogic {
+    func showNewProject() {
+        presenter?.showNewProject()
+    }
+    
+    func appLogout() {
+        persistance.deleteDefaultPersistance()
+        presenter?.hideMenu()
+    }
+    
     func getProjectsList() {
         service.getProjectsList(uid: uid) { querySnapshot, error in
             if let err = error {

@@ -18,7 +18,7 @@ struct CustomLinkButton: View {
             Text(title)
                 .underline()
                 .font(Constants.Fonts.bigFont)
-                .foregroundColor(Constants.Colors.textIconsColor)
+                .foregroundColor(Constants.Colors.primaryText)
         }
     }
 }

@@ -17,6 +17,8 @@ protocol HomePresentationLogic {
     func presentNextScreen(view: AnyView)
     
     func showProjectsList(querySnapshot: QuerySnapshot)
+    func hideMenu()
+    func showNewProject()
 }
 
 final class HomePresenter {
@@ -24,12 +26,34 @@ final class HomePresenter {
 }
 
 extension HomePresenter: HomePresentationLogic {
+    func showNewProject() {
+        viewModel?.showMenu = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) { self.viewModel?.showCreateNewProject = true }
+    }
+    
+    func hideMenu() {
+        viewModel?.showMenu = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+            self.viewModel?.closeApp = true
+        }
+    }
+    
     func showProjectsList(querySnapshot: QuerySnapshot) {
         let document = querySnapshot.documents
         let _ = Result {
             try document.compactMap {
-                let projects: Projects = try $0.data(as: Projects.self)
-                viewModel?.projects.append(projects)
+                //var projects: Projects = try $0.data(as: Projects.self)
+                let data = $0.data()
+                let projects: [Projects] = [
+                    Projects(
+                        elapsedTime: data["elapsedTime"] as! Int,
+                        name: data["name"] as! String,
+                        tasksNumber: data["tasksNumber"] as! Int,
+                        uid: data["uid"] as! String,
+                        projectId: $0.documentID)
+                ]
+                viewModel?.projects.append(contentsOf: projects)
+                
             }
         }
     }

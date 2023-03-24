@@ -15,6 +15,8 @@ protocol HomeViewState  {
     
     var projects: [Projects] { get set }
     var showMenu: Bool { get set }
+    var closeApp: Bool { get set }
+    var showCreateNewProject: Bool { get set }
 }
 
 class HomeViewModel: ObservableObject, HomeViewState {
@@ -26,6 +28,8 @@ class HomeViewModel: ObservableObject, HomeViewState {
     
     @Published var projects: [Projects] = [Projects]()
     @Published var showMenu: Bool = false
+    @Published var closeApp: Bool = false
+    @Published var showCreateNewProject: Bool = false
 }
 
 struct Projects: Codable {
@@ -33,4 +37,5 @@ struct Projects: Codable {
     var name: String
     var tasksNumber: Int
     var uid: String
+    var projectId: String
 }

@@ -41,11 +41,11 @@ struct RegisterView: View {
                             password: viewModel.pass.text,
                             passConfirm: viewModel.confirmPass.text)
                     }
-                }.background(Constants.Colors.darkPrimaryColor.opacity(0.9))
+                }
                 NavigationLink(destination: viewModel.destination, isActive: $viewModel.showNextScreen, label: {})
             }
             .navigationBarTitle(Text("Registro"), displayMode: .inline)
-            .background(Constants.Colors.darkPrimaryColor)
+            .background(Constants.Colors.textIconsColor)
             .navigationBarItems(
                 leading: BackButton(action: {
                     presentation.wrappedValue.dismiss()
